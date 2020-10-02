@@ -1,7 +1,7 @@
 package br.com.casadocodigo.controller;
 
-import br.com.casadocodigo.entity.Categoria;
-import br.com.casadocodigo.repositories.CategoriaRepository;
+import br.com.casadocodigo.repositories.LivroRepository;
+import br.com.casadocodigo.request.LivroRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,18 +11,18 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
-public class CategoriaController {
+public class LivroController {
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
+   @Autowired
+    private LivroRepository livroRepository;
 
-    @PostMapping(path = "/save/categoria")
+    @PostMapping(path = "/save/livro")
     @Transactional
-    public String cadastraCat(@Valid @RequestBody Categoria categoria){ categoriaRepository.save(categoria);
+    public String cadastraLivro(@Valid @RequestBody LivroRequest livroRequest){
 
+    //{ categoriaRepository.save(categoria);
 
-
-        return  categoria.toString();
+        return  livroRequest.toString();
     }
 
 }

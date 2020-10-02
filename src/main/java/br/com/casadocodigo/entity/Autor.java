@@ -20,6 +20,9 @@ public class Autor  implements Serializable {
     private @NotBlank @Size(min = 1 , max =400) String descrição;
     private LocalDateTime datahora = LocalDateTime.now();
 
+    public Autor() {
+    }
+
     public Autor(Long id, @NotBlank String nome, @NotBlank @Email String email, @NotBlank @Size(min = 1, max = 400) String descrição) {
         this.id = id;
         this.nome = nome;
@@ -43,9 +46,7 @@ public class Autor  implements Serializable {
         this.nome = nome;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
     public void setEmail(String email) {
         this.email = email;
