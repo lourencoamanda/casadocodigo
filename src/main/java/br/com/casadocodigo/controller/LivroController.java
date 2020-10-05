@@ -27,6 +27,15 @@ public class LivroController {
     @PostMapping(path = "/save/livro")
     @Transactional
     public ResponseEntity<?> cadastraLivro(@Valid @RequestBody LivroRequest livroRequest){
+
+        if(livroRepository.findByTitulo(livroRequest.getTitulo()).isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Titulo já possui cadastro nas bases de livro: " + livroRequest.getTitulo());
+        }
+
+        if(livroRepository.findByIsbn(livroRequest.getIsbn()).isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ISBN possui cadastro nas bases de livro: " + livroRequest.getIsbn());
+        }
+
         Livro novoLivro = livroRequest.toModel(entityManager);
         entityManager.persist(novoLivro);
         return ResponseEntity.status(HttpStatus.CREATED).body(livroRequest);
