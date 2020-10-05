@@ -1,6 +1,5 @@
 package br.com.casadocodigo.request;
 
-import br.com.casadocodigo.controller.ExistsId;
 import br.com.casadocodigo.entity.Autor;
 import br.com.casadocodigo.entity.Categoria;
 import br.com.casadocodigo.entity.Livro;
