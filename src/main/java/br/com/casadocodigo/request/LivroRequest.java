@@ -1,41 +1,45 @@
 package br.com.casadocodigo.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
+import br.com.casadocodigo.controller.ExistsId;
+import br.com.casadocodigo.entity.Autor;
+import br.com.casadocodigo.entity.Categoria;
+import br.com.casadocodigo.entity.Livro;
+import org.springframework.util.Assert;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.Date;
+import javax.persistence.EntityManager;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class LivroRequest {
 
     private @NotBlank @NotEmpty String titulo;
     private @NotBlank @NotEmpty @Size(max = 500) String resumo;
     private @NotBlank @NotEmpty String sumario;
-    private Double preco;
-    private Integer numPag;
-    private @NotBlank @NotEmpty String identLivro;
+    private @NotNull @Min(20) BigDecimal preco;
+    private @Min(100) Integer numPag;
+    private @NotBlank @NotEmpty String isbn;
+    private @Future LocalDate dataPublicacao;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date dataPublicacao;
+    @NotNull
+    private Long idCategoria;
 
-    private @NotBlank @NotEmpty String nomeCategoria;
-    private @NotBlank @NotEmpty String nomeAutor;
+    @NotNull
+    private Long idAutor;
 
     public LivroRequest() {
     }
 
-    public LivroRequest(@NotBlank @NotEmpty String titulo, @NotBlank @NotEmpty @Size(max = 500) String resumo, @NotBlank @NotEmpty String sumario, Double preco, Integer numPag, @NotBlank @NotEmpty String identLivro, Date dataPublicacao, @NotBlank @NotEmpty String nomeCategoria, @NotBlank @NotEmpty String nomeAutor) {
+    public LivroRequest(@NotBlank @NotEmpty String titulo, @NotBlank @NotEmpty @Size(max = 500) String resumo, @NotBlank @NotEmpty String sumario, @NotNull @Min(20) BigDecimal preco, @Min(100) Integer numPag, @NotBlank @NotEmpty String isbn, @Future LocalDate dataPublicacao, @NotNull Long idCategoria, @NotNull Long idAutor) {
         this.titulo = titulo;
         this.resumo = resumo;
         this.sumario = sumario;
         this.preco = preco;
         this.numPag = numPag;
-        this.identLivro = identLivro;
+        this.isbn = isbn;
         this.dataPublicacao = dataPublicacao;
-        this.nomeCategoria = nomeCategoria;
-        this.nomeAutor = nomeAutor;
+        this.idCategoria = idCategoria;
+        this.idAutor = idAutor;
     }
 
     public String getTitulo() {
@@ -68,52 +72,54 @@ public class LivroRequest {
         this.numPag = numPag;
     }
 
-    public String getIdentLivro() {
-        return identLivro;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setIdentLivro(String identLivro) {
-        this.identLivro = identLivro;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public String getNomeCategoria() {
-        return nomeCategoria;
-    }
+    public Long getIdCategoria() { return idCategoria; }
 
-    public void setNomeCategoria(String nomeCategoria) {
-        this.nomeCategoria = nomeCategoria;
-    }
+    public void setIdCategoria(Long idCategoria) { this.idCategoria = idCategoria; }
 
-    public String getNomeAutor() {
-        return nomeAutor;
-    }
+    public Long getIdAutor() { return idAutor; }
 
-    public void setNomeAutor(String nomeAutor) {
-        this.nomeAutor = nomeAutor;
-    }
+    public void setIdAutor(Long idAutor) { this.idAutor = idAutor; }
 
-    public Double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 
-    public Date getDataPublicacao() {
+    public LocalDate getDataPublicacao() {
         return dataPublicacao;
     }
 
-    public void setDataPublicacao(Date dataPublicacao) {
+    public void setDataPublicacao(LocalDate dataPublicacao) {
         this.dataPublicacao = dataPublicacao;
     }
 
     @Override
     public String toString() {
-        return "Categoria [ Titulo=" + titulo + ", resumo=" + resumo + "" +
-                ", sumario=" + sumario + ", Preço=" + preco + ", Numero Paginas=" + numPag +
-                ", Identificação Livro=" + identLivro + ", Categoria=" + nomeCategoria +
-                ", Autor=" + nomeAutor +   ", Data publicação= " + dataPublicacao + " ]";
+        return "Categoria: [ Titulo=" + titulo + ", " + "resumo=" + resumo + "" + ",sumario=" + sumario + ", " +
+                ",Preço=" + preco + ", " + ",Numero Paginas=" + numPag + ",ISBN=" + isbn + ", " + ",Categoria=" + idCategoria +
+                ", Autor=" + idAutor +   ", " + " Data publicação= " + dataPublicacao + " ]";
     }
+
+    public Livro toModel(EntityManager manager) {
+        @NotNull Autor autor = manager.find(Autor.class, idAutor);
+        @NotNull Categoria categoria = manager.find(Categoria.class, idCategoria);
+
+        Assert.state(autor!=null,"Você esta querendo cadastrar um livro para um autor que nao existe no banco "+idAutor);
+        Assert.state(categoria!=null,"Você esta querendo cadastrar um livro para uma categoria que nao existe no banco "+idCategoria);
+
+        return new Livro(titulo, resumo, sumario, preco, numPag, isbn, dataPublicacao, autor, categoria);
+    }
+
 
 }

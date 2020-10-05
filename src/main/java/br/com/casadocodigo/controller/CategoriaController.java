@@ -20,8 +20,12 @@ public class CategoriaController {
 
     @PostMapping(path = "/save/categoria")
     @Transactional
-    public ResponseEntity<?> cadastraCat(@Valid @RequestBody Categoria categoria){ categoriaRepository.save(categoria);
+    public ResponseEntity<?> cadastraCat(@Valid @RequestBody Categoria categoria){
 
+        if(categoriaRepository.findByDescricao(categoria.getDescricao()).isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(categoria);
+        }
+        categoriaRepository.save(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoria);
     }
 
