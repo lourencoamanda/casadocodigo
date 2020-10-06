@@ -6,14 +6,13 @@ import br.com.casadocodigo.request.LivroRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class LivroController {
@@ -40,4 +39,26 @@ public class LivroController {
         entityManager.persist(novoLivro);
         return ResponseEntity.status(HttpStatus.CREATED).body(livroRequest);
     }
+
+    //lista livro por id
+    @GetMapping(path = "/livros/{id}")
+    public ResponseEntity<?> detalhe(@PathVariable("id") Long id){
+
+        Livro livroBuscado = entityManager.find(Livro.class, id);
+
+        if (livroBuscado == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(livroBuscado);
+    }
+
+    //lista todos os livros
+    @GetMapping(path = "/lista/livros")
+    public List<Livro> listaLivros(){
+        return livroRepository.findAll();
+    }
+
+
+
 }
