@@ -1,4 +1,4 @@
-package br.com.casadocodigo.controller;
+package br.com.casadocodigo.categoria;
 
 import br.com.casadocodigo.entity.Categoria;
 import br.com.casadocodigo.repositories.CategoriaRepository;

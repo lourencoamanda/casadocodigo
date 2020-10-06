@@ -20,7 +20,7 @@ public class Pais implements Serializable {
     public Pais() {
     }
 
-    public Pais(Long id, @NotBlank String descricao) {
+    public Pais(@NotBlank String descricao) {
         this.descricao = descricao;
     }
 

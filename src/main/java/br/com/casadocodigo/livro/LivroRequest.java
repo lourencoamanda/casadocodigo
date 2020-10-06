@@ -1,4 +1,4 @@
-package br.com.casadocodigo.request;
+package br.com.casadocodigo.livro;
 
 import br.com.casadocodigo.entity.Autor;
 import br.com.casadocodigo.entity.Categoria;

@@ -1,8 +1,7 @@
-package br.com.casadocodigo.controller;
+package br.com.casadocodigo.livro;
 
 import br.com.casadocodigo.entity.Livro;
 import br.com.casadocodigo.repositories.LivroRepository;
-import br.com.casadocodigo.request.LivroRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
