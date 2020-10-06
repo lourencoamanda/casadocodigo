@@ -1,7 +1,6 @@
 package br.com.casadocodigo.pais;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 public class PaisRequest {
 

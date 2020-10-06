@@ -22,9 +22,6 @@ public class AutorController {
     @Autowired
     private AutorRepository autorRepository;
 
-   @Autowired
-   private ValidaEmailDuplicadoAutor validaEmailDuplicadoAutor;
-
     @PostMapping(path = "/save/autor")
     @Transactional
     public ResponseEntity<?> cadastraAutor(@Valid @RequestBody Autor autor){
