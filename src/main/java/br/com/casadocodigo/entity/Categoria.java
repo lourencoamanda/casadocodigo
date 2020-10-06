@@ -20,7 +20,7 @@ public class Categoria implements Serializable {
     public Categoria() {
     }
 
-    public Categoria(Long id, @NotBlank String descricao) {
+    public Categoria(@NotBlank String descricao) {
         this.descricao = descricao;
     }
 
