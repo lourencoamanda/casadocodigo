@@ -16,18 +16,17 @@ public class Autor  implements Serializable {
     private Long id;
 
     private @NotBlank(message  ="Nome invalido") String nome;
-    private @NotBlank @Email String email;
-    private @NotBlank @Size(min = 1 , max =400) String descrição;
+    private @Email String email;
+    private @NotBlank @Size(min = 1 , max =400) String descricao;
     private LocalDateTime datahora = LocalDateTime.now();
 
     public Autor() {
     }
 
-    public Autor(Long id, @NotBlank String nome, @NotBlank @Email String email, @NotBlank @Size(min = 1, max = 400) String descrição) {
-        this.id = id;
+    public Autor(@NotBlank String nome, @Email String email, @NotBlank @Size(min = 1, max = 400) String descricao) {
         this.nome = nome;
         this.email = email;
-        this.descrição = descrição;
+        this.descricao = descricao;
     }
 
     public Long getId() {
@@ -52,13 +51,9 @@ public class Autor  implements Serializable {
         this.email = email;
     }
 
-    public String getDescrição() {
-        return descrição;
-    }
+    public String getDescricao() { return descricao; }
 
-    public void setDescrição(String descrição) {
-        this.descrição = descrição;
-    }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
 
     public LocalDateTime getdatahora() { return datahora; }
 

@@ -24,13 +24,15 @@ public class AutorController {
 
     @PostMapping(path = "/save/autor")
     @Transactional
-    public ResponseEntity<?> cadastraAutor(@Valid @RequestBody Autor autor){
+    public ResponseEntity<?> cadastraAutor(@Valid @RequestBody AutorRequest requestAutor){
 
-    if(autorRepository.findByEmail(autor.getEmail()).isPresent()){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(autor);
+    if(autorRepository.findByEmail(requestAutor.getEmail()).isPresent()){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(requestAutor);
     }
-    autorRepository.save(autor);
-    return ResponseEntity.status(HttpStatus.CREATED).body(autor);
+
+    Autor novoAutor = new Autor(requestAutor.getNome(),requestAutor.getEmail(),requestAutor.getDescricao());
+        entityManager.persist(novoAutor);
+    return ResponseEntity.status(HttpStatus.CREATED).body(novoAutor);
 
     }
 
