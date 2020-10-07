@@ -31,7 +31,7 @@ public class LivroController {
         }
 
         if(livroRepository.findByIsbn(livroRequest.getIsbn()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ISBN possui cadastro nas bases de livro: " + livroRequest.getIsbn());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ISBN já possui cadastro nas bases de livro: " + livroRequest.getIsbn());
         }
 
         Livro novoLivro = livroRequest.toModel(entityManager);

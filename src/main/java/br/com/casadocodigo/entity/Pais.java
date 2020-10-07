@@ -17,7 +17,10 @@ public class Pais implements Serializable {
 
     private @NotBlank String descricao;
 
-    public Pais() {
+    public Pais(){
+    }
+
+    public Pais(@NotBlank(message = "País Inválido") Long idPais) {
     }
 
     public Pais(@NotBlank String descricao) {
