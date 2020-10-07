@@ -43,9 +43,7 @@ public class Estado implements Serializable {
         this.nome = nome;
     }
 
-    public Pais getPais() {
-        return pais;
-    }
+    public Pais getPais() { return pais; }
 
     public void setPais(Pais pais) {
         this.pais = pais;

@@ -1,8 +1,5 @@
 package br.com.casadocodigo.cliente;
 
-import br.com.casadocodigo.autor.AutorRequest;
-import br.com.casadocodigo.entity.Autor;
-import br.com.casadocodigo.repositories.AutorRepository;
 import br.com.casadocodigo.repositories.EstadoRepository;
 import br.com.casadocodigo.repositories.PaisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +27,17 @@ public class ClienteController {
 
     @PostMapping(path = "/validar/cliente")
     @Transactional
-    public ResponseEntity<?> cadastraAutor(@Valid @RequestBody ClienteRequest clienteRequest) {
+    public Object cadastraCliente(@Valid @RequestBody ClienteRequest clienteRequest) {
 
         if (paisRepository.findById(clienteRequest.getIdPais()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(clienteRequest);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteRequest);
 
+        clienteRequest.validaCpfCpnj();
+
+        if(!clienteRequest.validaCpfCpnj()) {
+           return( "documento precisa ser cpf ou cnpj");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(clienteRequest);
     }
 }

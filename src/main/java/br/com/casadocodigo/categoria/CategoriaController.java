@@ -36,5 +36,4 @@ public class CategoriaController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
     }
-
 }

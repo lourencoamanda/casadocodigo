@@ -41,6 +41,10 @@ public class Cupom implements Serializable {
         this.id = id;
     }
 
+    public String getCodigoCupom() { return codigoCupom; }
+
+    public void setCodigoCupom(String codigoCupom) { this.codigoCupom = codigoCupom; }
+
     public BigDecimal getPercentualDesconto() {
         return percentualDesconto;
     }

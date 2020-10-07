@@ -1,23 +1,19 @@
 package br.com.casadocodigo.cliente;
 
-import br.com.casadocodigo.entity.Autor;
-import br.com.casadocodigo.entity.Categoria;
-import br.com.casadocodigo.entity.Livro;
-import br.com.casadocodigo.entity.Pais;
+import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
+import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.util.Assert;
 
-import javax.persistence.EntityManager;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 public class ClienteRequest {
 
     private @Email(message = "Email Inválido") String email;
     private @NotBlank(message  ="Nome Inválido") String nome;
     private @NotBlank(message  ="Sobrenome Inválido") String sobrenome;
-    private @NotNull (message  ="CPF/CPNJ Inválido")String cpfCnpj;
+    private @NotBlank @NotNull (message  ="CPF/CPNJ Inválido")String cpfCnpj;
     private @NotBlank(message  ="Endereço Inválido") String endereco;
     private @NotBlank(message  ="Complemento Inválido") String complemento;
     private @NotBlank(message  ="Cidade Inválido") String cidade;
@@ -29,7 +25,7 @@ public class ClienteRequest {
     public ClienteRequest() {
     }
 
-    public ClienteRequest(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotNull(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotNull(message = "País Inválido") Long idPais, @NotNull(message = "Estado Inválido") Long idEstado, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep) {
+    public ClienteRequest(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotBlank @NotNull(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotNull(message = "País Inválido") Long idPais, @NotNull(message = "Estado Inválido") Long idEstado, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep) {
         this.email = email;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -129,6 +125,19 @@ public class ClienteRequest {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public boolean validaCpfCpnj() {
+        Assert.hasLength(this.cpfCnpj, "{ CPF/CPNJ Inválido }");
+
+        CPFValidator cpfValidator = new CPFValidator();
+        cpfValidator.initialize(null);
+
+        CNPJValidator cnpjValidator = new CNPJValidator();
+        cnpjValidator.initialize(null);
+
+        return cpfValidator.isValid(this.cpfCnpj, null)
+                || cnpjValidator.isValid(this.cpfCnpj, null);
     }
 
 //  / // public Pais toModel(EntityManager manager) {

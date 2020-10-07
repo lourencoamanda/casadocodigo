@@ -43,6 +43,4 @@ public class Pais implements Serializable {
         this.descricao = descricao;
     }
 
-
-
 }
