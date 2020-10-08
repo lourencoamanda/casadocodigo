@@ -28,13 +28,13 @@ public class PaisController {
     public ResponseEntity<?> cadastraPais(@Valid @RequestBody PaisRequest paisRequest){
 
         if(paisRepository.findByDescricao(paisRequest.getDescricao()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Pais já possui cadastro");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Pais já possui cadastro: " + paisRequest.getDescricao());
         }
 
         Pais novoPais = new Pais(paisRequest.getDescricao());
         entityManager.persist(novoPais);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(novoPais);
 
     }
-
 }

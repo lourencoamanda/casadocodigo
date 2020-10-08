@@ -18,14 +18,14 @@ public class ClienteRequest {
     private @NotBlank(message  ="Complemento Inválido") String complemento;
     private @NotBlank(message  ="Cidade Inválido") String cidade;
     private @NotNull(message  ="País Inválido") Long idPais;
-    private @NotNull(message  ="Estado Inválido") Long idEstado;
+    private Long idEstado;
     private @NotBlank(message  ="Telefone Inválido") String telefone;
     private @NotBlank(message  ="CEP Inválido") String cep;
 
     public ClienteRequest() {
     }
 
-    public ClienteRequest(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotBlank @NotNull(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotNull(message = "País Inválido") Long idPais, @NotNull(message = "Estado Inválido") Long idEstado, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep) {
+    public ClienteRequest(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotBlank @NotNull(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotNull(message = "País Inválido") Long idPais, Long idEstado, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep) {
         this.email = email;
         this.nome = nome;
         this.sobrenome = sobrenome;

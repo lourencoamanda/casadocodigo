@@ -4,11 +4,12 @@ import javax.validation.constraints.NotBlank;
 
 public class CategoriaRequest {
 
-    private @NotBlank String descricao;
+    private @NotBlank (message = "{ Descrição Inválida }") String descricao;
 
     public CategoriaRequest() {
     }
-    public CategoriaRequest(@NotBlank String descricao) {
+
+    public CategoriaRequest(@NotBlank(message = "{ Descrição Inválida }") String descricao) {
         this.descricao = descricao;
     }
 

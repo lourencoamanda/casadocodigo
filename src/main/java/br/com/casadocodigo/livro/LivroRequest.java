@@ -12,13 +12,13 @@ import java.time.LocalDate;
 
 public class LivroRequest {
 
-    private @NotBlank @NotEmpty String titulo;
-    private @NotBlank @NotEmpty @Size(max = 500) String resumo;
-    private @NotBlank @NotEmpty String sumario;
-    private @NotNull @Min(20) BigDecimal preco;
+    private @NotBlank (message  ="{ Titulo Inválido }")  String titulo;
+    private @NotBlank (message  ="{ Resumo Inválido }") @Size(max = 500) String resumo;
+    private @NotBlank (message  ="{ Sumário Inválido }") String sumario;
+    private @NotNull (message  ="{ Preço Inválido }") @Min(20) BigDecimal preco;
     private @Min(100) Integer numPag;
-    private @NotBlank @NotEmpty String isbn;
-    private @Future LocalDate dataPublicacao;
+    private @NotBlank (message  ="{ ISBN Inválido }")String isbn;
+    private @Future(message  ="{ Data de Publicação não está no futuro }") LocalDate dataPublicacao;
 
     @NotNull
     private Long idCategoria;
@@ -29,7 +29,7 @@ public class LivroRequest {
     public LivroRequest() {
     }
 
-    public LivroRequest(@NotBlank @NotEmpty String titulo, @NotBlank @NotEmpty @Size(max = 500) String resumo, @NotBlank @NotEmpty String sumario, @NotNull @Min(20) BigDecimal preco, @Min(100) Integer numPag, @NotBlank @NotEmpty String isbn, @Future LocalDate dataPublicacao, @NotNull Long idCategoria, @NotNull Long idAutor) {
+    public LivroRequest(@NotBlank(message = "{ Titulo Inválido }") String titulo, @NotBlank(message = "{ Resumo Inválido }") @Size(max = 500) String resumo, @NotBlank(message = "{ Sumário Inválido }") String sumario, @NotNull(message = "{ Preço Inválido }") @Min(20) BigDecimal preco, @Min(100) Integer numPag, @NotBlank(message = "{ ISBN Inválido }") String isbn, @Future(message = "{ Data de Publicação não está no futuro }") LocalDate dataPublicacao, @NotNull Long idCategoria, @NotNull Long idAutor) {
         this.titulo = titulo;
         this.resumo = resumo;
         this.sumario = sumario;
@@ -119,6 +119,5 @@ public class LivroRequest {
 
         return new Livro(titulo, resumo, sumario, preco, numPag, isbn, dataPublicacao, autor, categoria);
     }
-
 
 }

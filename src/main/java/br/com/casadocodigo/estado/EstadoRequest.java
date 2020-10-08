@@ -9,13 +9,13 @@ import javax.validation.constraints.NotNull;
 
 public class EstadoRequest {
 
-    private @NotBlank String nome;
-    private @NotNull Long idPais;
+    private @NotBlank (message = "{ Nome do estado Inválido }") String nome;
+    private @NotNull(message = "{ Id do país Inválido }") Long idPais;
 
     public EstadoRequest(){
     }
 
-    public EstadoRequest(@NotBlank String nome, @NotNull Long idPais) {
+    public EstadoRequest(@NotBlank(message = "{ Nome do estado Inválido }") String nome, @NotNull(message = "{ Id do país Inválido }") Long idPais) {
         this.nome = nome;
         this.idPais = idPais;
     }

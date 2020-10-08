@@ -37,7 +37,7 @@ public class CupomController {
 
     @PutMapping(path = "/atualiza/cupom/{id}")
     @Transactional
-    public ResponseEntity<?> atualizaCupom(@PathVariable("id") Long id, @RequestBody CupomRequest cupomRequest ) {
+    public ResponseEntity<?> atualizaCupom(@PathVariable("id") Long id, @RequestBody @Valid CupomRequest cupomRequest ) {
 
         return cupomRepository.findById(id).map(cupom -> {
                     cupom.setCodigoCupom(cupomRequest.getCodigoCupom());

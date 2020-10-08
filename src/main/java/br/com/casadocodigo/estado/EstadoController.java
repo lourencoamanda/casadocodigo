@@ -28,7 +28,7 @@ public class EstadoController {
     public ResponseEntity<?> cadastraEstado(@Valid @RequestBody EstadoRequest estadoRequest) {
 
        if(estadoRepository.findByNome(estadoRequest.getNome()).isPresent()){
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Estado já possui cadastro no banco de dados");
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Estado já possui cadastro:  " + estadoRequest.getNome());
       }
         Estado novoEstado = estadoRequest.toModel(entityManager);
         entityManager.persist(novoEstado);

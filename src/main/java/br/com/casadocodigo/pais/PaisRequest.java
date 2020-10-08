@@ -4,11 +4,12 @@ import javax.validation.constraints.NotBlank;
 
 public class PaisRequest {
 
-    private @NotBlank String descricao;
+    private @NotBlank (message = "{ Descrição Inválida }") String descricao;
 
     public PaisRequest() {
     }
-    public PaisRequest(@NotBlank String descricao) {
+
+    public PaisRequest(@NotBlank(message = "{ Descrição Inválida }") String descricao) {
         this.descricao = descricao;
     }
 

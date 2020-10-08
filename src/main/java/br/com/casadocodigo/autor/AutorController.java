@@ -32,6 +32,7 @@ public class AutorController {
 
     Autor novoAutor = new Autor(requestAutor.getNome(),requestAutor.getEmail(),requestAutor.getDescricao());
     entityManager.persist(novoAutor);
+
     return ResponseEntity.status(HttpStatus.CREATED).body(novoAutor);
 
     }

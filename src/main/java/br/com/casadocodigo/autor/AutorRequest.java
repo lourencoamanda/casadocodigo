@@ -6,14 +6,14 @@ import javax.validation.constraints.Size;
 
 public class AutorRequest {
 
-    private @NotBlank(message  ="Nome invalido") String nome;
-    private @Email String email;
-    private @NotBlank @Size(min = 1 , max =400) String descricao;
+    private @NotBlank(message  ="{ Nome Inválido }") String nome;
+    private @Email(message  ="{ Email Inválido }") String email;
+    private @NotBlank(message = "{ Descrição Inválida }") @Size(min = 1 , max =400) String descricao;
 
     public AutorRequest() {
     }
 
-    public AutorRequest(@NotBlank(message = "Nome invalido") String nome, @Email String email, @NotBlank @Size(min = 1, max = 400) String descricao) {
+    public AutorRequest(@NotBlank(message = "{ Nome Inválido }") String nome, @Email(message = "{ Email Inválido }") String email, @NotBlank(message = "{ Descrição Inválida }") @Size(min = 1, max = 400) String descricao) {
         this.nome = nome;
         this.email = email;
         this.descricao = descricao;

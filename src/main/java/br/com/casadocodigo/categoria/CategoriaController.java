@@ -25,7 +25,7 @@ public class CategoriaController {
 
     @PostMapping(path = "/save/categoria")
     @Transactional
-    public ResponseEntity<?> cadastraCat(@Valid @RequestBody CategoriaRequest requestCategoria){
+    public ResponseEntity<?> cadastraCategoria(@Valid @RequestBody CategoriaRequest requestCategoria){
 
         if(categoriaRepository.findByDescricao(requestCategoria.getDescricao()).isPresent()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(requestCategoria);

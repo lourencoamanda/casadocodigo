@@ -41,7 +41,7 @@ public class LivroController {
 
     //lista livro por id
     @GetMapping(path = "/livros/{id}")
-    public ResponseEntity<?> detalhe(@PathVariable("id") Long id){
+    public ResponseEntity<?> detalhesLivro(@PathVariable("id") Long id){
 
         Livro livroBuscado = entityManager.find(Livro.class, id);
 
@@ -54,10 +54,9 @@ public class LivroController {
 
     //lista todos os livros
     @GetMapping(path = "/lista/livros")
+
     public List<Livro> listaLivros(){
         return livroRepository.findAll();
     }
-
-
 
 }
