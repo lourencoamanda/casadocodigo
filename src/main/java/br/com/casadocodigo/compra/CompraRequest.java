@@ -1,31 +1,44 @@
-package br.com.casadocodigo.cliente;
+package br.com.casadocodigo.compra;
 
+import br.com.casadocodigo.entity.*;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import javax.persistence.EntityManager;
+
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public class ClienteRequest {
+public class CompraRequest {
 
     private @Email(message = "Email Inválido") String email;
     private @NotBlank(message  ="Nome Inválido") String nome;
     private @NotBlank(message  ="Sobrenome Inválido") String sobrenome;
-    private @NotBlank @NotNull (message  ="CPF/CPNJ Inválido")String cpfCnpj;
+    private @NotBlank(message  ="CPF/CPNJ Inválido")String cpfCnpj;
     private @NotBlank(message  ="Endereço Inválido") String endereco;
     private @NotBlank(message  ="Complemento Inválido") String complemento;
     private @NotBlank(message  ="Cidade Inválido") String cidade;
-    private @NotNull(message  ="País Inválido") Long idPais;
-    private Long idEstado;
     private @NotBlank(message  ="Telefone Inválido") String telefone;
     private @NotBlank(message  ="CEP Inválido") String cep;
+    private @NotNull(message  ="País Inválido") Long idPais;
+    private Long idEstado;
+    private String codigoCupom;
 
-    public ClienteRequest() {
+    private @Min(value =1, message = "Total mínimo é 1 ") BigDecimal total;
+    private List<ItensCarrinho> itensCarrinho = new ArrayList<>();
+
+    public CompraRequest() {
     }
 
-    public ClienteRequest(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotBlank @NotNull(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotNull(message = "País Inválido") Long idPais, Long idEstado, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep) {
+    public CompraRequest(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotBlank(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep, @NotNull(message = "País Inválido") Long idPais, Long idEstado, String codigoCupom, @Min(value = 1, message = "Total mínimo é 1 ") BigDecimal total, List<ItensCarrinho> itensCarrinho) {
         this.email = email;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -33,10 +46,13 @@ public class ClienteRequest {
         this.endereco = endereco;
         this.complemento = complemento;
         this.cidade = cidade;
-        this.idPais = idPais;
-        this.idEstado = idEstado;
         this.telefone = telefone;
         this.cep = cep;
+        this.idPais = idPais;
+        this.idEstado = idEstado;
+        this.codigoCupom = codigoCupom;
+        this.total = total;
+        this.itensCarrinho = itensCarrinho;
     }
 
     public String getEmail() {
@@ -95,22 +111,6 @@ public class ClienteRequest {
         this.cidade = cidade;
     }
 
-    public Long getIdPais() {
-        return idPais;
-    }
-
-    public void setIdPais(Long idPais) {
-        this.idPais = idPais;
-    }
-
-    public Long getIdEstado() {
-        return idEstado;
-    }
-
-    public void setIdEstado(Long idEstado) {
-        this.idEstado = idEstado;
-    }
-
     public String getTelefone() {
         return telefone;
     }
@@ -127,6 +127,46 @@ public class ClienteRequest {
         this.cep = cep;
     }
 
+    public Long getIdPais() {
+        return idPais;
+    }
+
+    public void setIdPais(Long idPais) {
+        this.idPais = idPais;
+    }
+
+    public Long getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(Long idEstado) {
+        this.idEstado = idEstado;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public List<ItensCarrinho> getItensCarrinho() {
+        return itensCarrinho;
+    }
+
+    public void setItensCarrinho(List<ItensCarrinho> itensCarrinho) {
+        this.itensCarrinho = itensCarrinho;
+    }
+
+    public String getCodigoCupom() {
+        return codigoCupom;
+    }
+
+    public void setCodigoCupom(String codigoCupom) {
+        this.codigoCupom = codigoCupom;
+    }
+
     public boolean validaCpfCpnj() {
         Assert.hasLength(this.cpfCnpj, "{ CPF/CPNJ Inválido }");
 
@@ -140,14 +180,20 @@ public class ClienteRequest {
                 || cnpjValidator.isValid(this.cpfCnpj, null);
     }
 
-//  / // public Pais toModel(EntityManager manager) {
-   //     @NotNull Pais pais = manager.find(Pais.class, idPais);
-      //  @NotNull Categoria categoria = manager.find(Categoria.class, idCategoria);
+    public Cliente toModel(EntityManager manager) {
 
-  //      Assert.state(pais!=null,"Você esta querendo cadastrar um pais que nao existe no banco "+idPais);
-        //Assert.state(categoria!=null,"Você esta querendo cadastrar um livro para uma categoria que nao existe no banco "+idCategoria);
+        //valida pais e estado
+        @NotNull Pais pais = manager.find(Pais.class, idPais);
+        @NotNull Estado estado = manager.find(Estado.class, idEstado);
 
-    //    return new Pais(idPais);
-    //}
+        Assert.state(pais!=null,"Pais não possui cadastro nas bases de dados: "+idPais );
+        Assert.state(estado!=null,"Estado não possui cadastro nas bases de dados: "+idEstado);
+
+     
+
+        return new Cliente(email,nome,sobrenome,cpfCnpj,endereco,complemento,cidade,telefone,cep, pais, estado, total, itensCarrinho);
+    }
+
+
 
 }

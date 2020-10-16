@@ -21,7 +21,7 @@ public class Livro implements Serializable {
     private @NotBlank @NotEmpty String titulo;
     private @NotBlank @NotEmpty @Size(min = 1 , max =500) String resumo;
     private @NotBlank @NotEmpty String sumario;
-    private @Min(20) BigDecimal preco;
+    private @Min(20) BigDecimal preco = new BigDecimal(0);
     private @Min(100)  Integer numPag;
     private @NotBlank String isbn;
     private @Future LocalDate dataPublicacao;

@@ -18,7 +18,6 @@ public class Estado implements Serializable {
     @ManyToOne
     private @NotNull @Valid Pais pais;
 
-    @Deprecated
     public Estado() {
     }
 
@@ -47,5 +46,9 @@ public class Estado implements Serializable {
 
     public void setPais(Pais pais) {
         this.pais = pais;
+    }
+
+    public boolean pertenceAPais(Pais pais) {
+        return this.pais.equals(pais);
     }
 }
