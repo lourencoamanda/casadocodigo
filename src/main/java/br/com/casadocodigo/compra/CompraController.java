@@ -42,7 +42,6 @@ public class CompraController {
     public ResponseEntity<?> validarCliente(@Valid @RequestBody CompraRequest compraRequest) {
 
         Cliente novoCliente = compraRequest.toModel(entityManager);
-
         novoCliente.toModelCupom(compraRequest.getCodigoCupom(), entityManager);
 
         entityManager.persist(novoCliente);
