@@ -1,6 +1,5 @@
 package br.com.casadocodigo.compra;
 
-import br.com.casadocodigo.entity.Estado;
 import br.com.casadocodigo.entity.Livro;
 import br.com.casadocodigo.repositories.CupomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Component

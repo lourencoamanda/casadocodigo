@@ -1,6 +1,8 @@
 package br.com.casadocodigo.compra;
 
+import br.com.casadocodigo.cupom.CupomAplicado;
 import br.com.casadocodigo.entity.*;
+import br.com.casadocodigo.repositories.CupomRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,11 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CompraRequest {
+
+    @Autowired
+    private CupomRepository cupomRepository;
 
     private @Email(message = "Email Inválido") String email;
     private @NotBlank(message  ="Nome Inválido") String nome;
@@ -34,6 +38,10 @@ public class CompraRequest {
 
     private @Min(value =1, message = "Total mínimo é 1 ") BigDecimal total;
     private List<ItensCarrinho> itensCarrinho = new ArrayList<>();
+
+    private CupomAplicado cupomAplicado;
+
+    private Cliente cliente;
 
     public CompraRequest() {
     }
@@ -182,18 +190,31 @@ public class CompraRequest {
 
     public Cliente toModel(EntityManager manager) {
 
-        //valida pais e estado
         @NotNull Pais pais = manager.find(Pais.class, idPais);
         @NotNull Estado estado = manager.find(Estado.class, idEstado);
 
         Assert.state(pais!=null,"Pais não possui cadastro nas bases de dados: "+idPais );
         Assert.state(estado!=null,"Estado não possui cadastro nas bases de dados: "+idEstado);
 
-     
+
+
+
+
 
         return new Cliente(email,nome,sobrenome,cpfCnpj,endereco,complemento,cidade,telefone,cep, pais, estado, total, itensCarrinho);
     }
 
 
 
+    public void toModelCupom(EntityManager manager){
+
+        List<Cupom> cupomValido = manager
+                .createNativeQuery("SELECT * FROM CUPOM WHERE CODIGO_CUPOM = :codigo", Cupom.class)
+                .setParameter("codigo", codigoCupom)
+                .getResultList();
+
+        cliente.aplicaCupom(cupomValido.get(0));
+
+
+    }
 }

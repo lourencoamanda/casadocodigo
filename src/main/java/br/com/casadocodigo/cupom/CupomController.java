@@ -47,5 +47,4 @@ public class CupomController {
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.notFound().build());
     }
-
 }

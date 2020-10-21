@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-
 @RestController
 public class EstadoController {
 
@@ -33,8 +32,8 @@ public class EstadoController {
         Estado novoEstado = estadoRequest.toModel(entityManager);
         entityManager.persist(novoEstado);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoEstado);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Estado cadastrado com sucesso!" + novoEstado);
 
     }
 
-    }
+}

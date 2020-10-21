@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,15 +26,15 @@ public class CategoriaController {
 
     @PostMapping(path = "/save/categoria")
     @Transactional
-    public ResponseEntity<?> cadastraCategoria(@Valid @RequestBody CategoriaRequest requestCategoria){
+    public ResponseEntity<?> cadastraCategoria(@Valid @RequestBody CategoriaRequest requestCategoria, UriComponentsBuilder builder){
 
         if(categoriaRepository.findByDescricao(requestCategoria.getDescricao()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(requestCategoria);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categoria já possui cadastro!" + requestCategoria);
         }
 
         Categoria novaCategoria = new Categoria(requestCategoria.getDescricao());
         entityManager.persist(novaCategoria);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Categoria cadastrada com sucesso!" + novaCategoria);
     }
 }

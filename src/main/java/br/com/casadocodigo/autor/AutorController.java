@@ -27,13 +27,13 @@ public class AutorController {
     public ResponseEntity<?> cadastraAutor(@Valid @RequestBody AutorRequest requestAutor){
 
     if(autorRepository.findByEmail(requestAutor.getEmail()).isPresent()){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(requestAutor);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Autor já possui cadastro!" + requestAutor);
     }
 
     Autor novoAutor = new Autor(requestAutor.getNome(),requestAutor.getEmail(),requestAutor.getDescricao());
     entityManager.persist(novoAutor);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(novoAutor);
+    return ResponseEntity.status(HttpStatus.CREATED).body("Autor Cadastrado com sucesso!" + novoAutor);
 
     }
 }

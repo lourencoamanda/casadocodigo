@@ -8,7 +8,6 @@ import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 public class Cupom implements Serializable {
@@ -55,7 +54,10 @@ public class Cupom implements Serializable {
         return validade;
     }
 
-    public void setValidade(LocalDate validade) {
-        this.validade = validade;
+    public void setValidade(LocalDate validade) { this.validade = validade; }
+
+    public boolean valido() {
+        return LocalDate.now().compareTo(this.validade) <= 0;
     }
+
 }

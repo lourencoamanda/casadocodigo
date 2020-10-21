@@ -1,8 +1,8 @@
 package br.com.casadocodigo.compra;
 
+import br.com.casadocodigo.cupom.CupomAplicado;
+import br.com.casadocodigo.entity.Cliente;
 import br.com.casadocodigo.entity.Cupom;
-import br.com.casadocodigo.entity.Livro;
-import br.com.casadocodigo.repositories.CupomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -10,16 +10,15 @@ import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 
 @Component
 public class ValidaCupom implements Validator {
 
     @PersistenceContext
     private EntityManager manager;
-
-    @Autowired
-    private CupomRepository cupomRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -33,13 +32,24 @@ public class ValidaCupom implements Validator {
         }
 
         CompraRequest request = (CompraRequest) target;
+        BigDecimal valorDesconto = new BigDecimal(0);
+        BigDecimal valorTotal = new BigDecimal(0);
 
-        Optional<Cupom> buscarCupom = cupomRepository.findByCodigoCupom(request.getCodigoCupom());
+        if(!request.getCodigoCupom().isEmpty()){
 
-     //   Cupom buscarCupom = manager.find(Cupom.class, 33);
+            List<Cupom> cupomValido = manager
+                    .createNativeQuery("SELECT * FROM CUPOM WHERE CODIGO_CUPOM = :codigo", Cupom.class)
+                    .setParameter("codigo", request.getCodigoCupom())
+                    .getResultList();
 
-        System.out.println("deu certo" + buscarCupom);
+            Cupom cupom = cupomValido.get(0);
 
+            if(!cupom.valido()){
+                errors.rejectValue("codigoCupom", null, "Este cupom não é mais válido");
+            }
+            valorDesconto = request.getTotal().multiply(cupom.getPercentualDesconto().setScale(2, RoundingMode.HALF_DOWN));
+            request.setTotal(request.getTotal().subtract(valorDesconto).setScale(2, RoundingMode.HALF_DOWN));
 
+        }
     }
 }

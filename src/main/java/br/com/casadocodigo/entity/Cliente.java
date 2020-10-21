@@ -1,12 +1,14 @@
 package br.com.casadocodigo.entity;
 
 import br.com.casadocodigo.compra.CompraRequest;
+import br.com.casadocodigo.cupom.CupomAplicado;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Entity
@@ -38,6 +40,10 @@ public class Cliente implements Serializable {
     @ElementCollection
     @CollectionTable(name="cliente_pedido")
     private List<ItensCarrinho> itensCarrinho;
+
+    @Embedded
+    private CupomAplicado cupomAplicado;
+
 
     public Cliente() {
     }
@@ -158,7 +164,7 @@ public class Cliente implements Serializable {
     }
 
     public BigDecimal getTotal() {
-        return total;
+        return total.setScale(2, RoundingMode.HALF_DOWN);
     }
 
     public void setTotal(BigDecimal total) {
@@ -171,6 +177,10 @@ public class Cliente implements Serializable {
 
     public void setItensCarrinho(List<ItensCarrinho> itensCarrinho) {
         this.itensCarrinho = itensCarrinho;
+    }
+
+    public void aplicaCupom(Cupom cupom) {
+        this.cupomAplicado = new CupomAplicado(cupom);
     }
 
 }

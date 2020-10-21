@@ -4,7 +4,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class CupomRequest {
+public class   CupomRequest {
 
     private @NotBlank(message  ="Código Cupom Inválido") String codigoCupom;
     private @Positive(message  ="Percentual Desconto Inválido") @NotNull BigDecimal percentualDesconto;

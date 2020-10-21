@@ -39,7 +39,6 @@ public class LivroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(livroRequest);
     }
 
-    //lista livro por id
     @GetMapping(path = "/livros/{id}")
     public ResponseEntity<?> detalhesLivro(@PathVariable("id") Long id){
 
@@ -52,7 +51,6 @@ public class LivroController {
         return ResponseEntity.status(HttpStatus.OK).body(livroBuscado);
     }
 
-    //lista todos os livros
     @GetMapping(path = "/lista/livros")
 
     public List<Livro> listaLivros(){

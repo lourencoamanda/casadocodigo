@@ -2,22 +2,15 @@ package br.com.casadocodigo.compra;
 
 import br.com.casadocodigo.entity.*;
 import br.com.casadocodigo.estado.ValidaEstadoPertencePais;
-import br.com.casadocodigo.repositories.CupomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 
@@ -26,9 +19,6 @@ public class CompraController {
 
     @Autowired
     private EntityManager entityManager;
-
-    @Autowired
-    private CupomRepository cupomRepository;
 
     @Autowired
     private ValidaEstadoPertencePais validaEstadoPertencePais;
@@ -44,7 +34,7 @@ public class CompraController {
 
     @InitBinder
     public void init(WebDataBinder binder) {
-       binder.addValidators(validaCpfCnpj, validaEstadoPertencePais, validaCupom, validaTotal);
+       binder.addValidators(validaCpfCnpj, validaEstadoPertencePais,validaTotal,validaCupom);
     }
 
     @PostMapping(path = "/validar/compra")
@@ -53,11 +43,26 @@ public class CompraController {
 
         Cliente novoCliente = compraRequest.toModel(entityManager);
 
+        List<Cupom> cupomValido = entityManager
+                .createNativeQuery("SELECT * FROM CUPOM WHERE CODIGO_CUPOM = :codigo", Cupom.class)
+                .setParameter("codigo", compraRequest.getCodigoCupom())
+                .getResultList();
+
+        novoCliente.aplicaCupom(cupomValido.get(0));
+
         entityManager.persist(novoCliente);
-
         URI location = URI.create(String.format("/validar/compra", novoCliente.getId()));
-
         return ResponseEntity.status(HttpStatus.CREATED).body(compraRequest);
     }
 
+    @GetMapping(path = "/compra/{id}")
+    public ResponseEntity<?> consultaDetalheCompra(@PathVariable("id") Long id){
+
+        Cliente buscaDetalheCompra = entityManager.find(Cliente.class, id);
+
+        if (buscaDetalheCompra == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(buscaDetalheCompra);
+    }
 }
