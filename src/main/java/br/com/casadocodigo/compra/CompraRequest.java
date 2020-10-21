@@ -43,6 +43,9 @@ public class CompraRequest {
 
     private Cliente cliente;
 
+    private BigDecimal totalSemDesconto;
+
+
     public CompraRequest() {
     }
 
@@ -175,6 +178,14 @@ public class CompraRequest {
         this.codigoCupom = codigoCupom;
     }
 
+    public BigDecimal getTotalSemDesconto() {
+        return totalSemDesconto;
+    }
+
+    public void setTotalSemDesconto(BigDecimal totalSemDesconto) {
+        this.totalSemDesconto = totalSemDesconto;
+    }
+
     public boolean validaCpfCpnj() {
         Assert.hasLength(this.cpfCnpj, "{ CPF/CPNJ Inválido }");
 
@@ -196,25 +207,7 @@ public class CompraRequest {
         Assert.state(pais!=null,"Pais não possui cadastro nas bases de dados: "+idPais );
         Assert.state(estado!=null,"Estado não possui cadastro nas bases de dados: "+idEstado);
 
-
-
-
-
-
-        return new Cliente(email,nome,sobrenome,cpfCnpj,endereco,complemento,cidade,telefone,cep, pais, estado, total, itensCarrinho);
+        return new Cliente(email,nome,sobrenome,cpfCnpj,endereco,complemento,cidade,telefone,cep, pais, estado, total, totalSemDesconto, itensCarrinho);
     }
 
-
-
-    public void toModelCupom(EntityManager manager){
-
-        List<Cupom> cupomValido = manager
-                .createNativeQuery("SELECT * FROM CUPOM WHERE CODIGO_CUPOM = :codigo", Cupom.class)
-                .setParameter("codigo", codigoCupom)
-                .getResultList();
-
-        cliente.aplicaCupom(cupomValido.get(0));
-
-
-    }
 }

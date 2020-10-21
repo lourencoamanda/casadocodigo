@@ -37,6 +37,8 @@ public class ValidaCupom implements Validator {
 
         if(!request.getCodigoCupom().isEmpty()){
 
+            request.setTotalSemDesconto(request.getTotal());
+
             List<Cupom> cupomValido = manager
                     .createNativeQuery("SELECT * FROM CUPOM WHERE CODIGO_CUPOM = :codigo", Cupom.class)
                     .setParameter("codigo", request.getCodigoCupom())

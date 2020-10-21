@@ -1,24 +1,24 @@
-package br.com.casadocodigo.entity;
+package br.com.casadocodigo.compra;
 
-import br.com.casadocodigo.compra.CompraRequest;
 import br.com.casadocodigo.cupom.CupomAplicado;
+import br.com.casadocodigo.entity.Cupom;
+import br.com.casadocodigo.entity.Estado;
+import br.com.casadocodigo.entity.ItensCarrinho;
+import br.com.casadocodigo.entity.Pais;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-@Entity
-public class Cliente implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class CompraResponse  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private @Email(message = "Email Inválido") String email;
     private @NotBlank(message  ="Nome Inválido") String nome;
     private @NotBlank(message  ="Sobrenome Inválido") String sobrenome;
@@ -28,29 +28,19 @@ public class Cliente implements Serializable {
     private @NotBlank(message  ="Cidade Inválido") String cidade;
     private @NotBlank(message  ="Telefone Inválido") String telefone;
     private @NotBlank(message  ="CEP Inválido") String cep;
-
-    @ManyToOne
     private @NotNull @Valid Pais pais;
-
-    @ManyToOne
     private @NotNull @Valid Estado estado;
-
     private BigDecimal total;
-
-    private BigDecimal totalSemDesconto;
-
-    @ElementCollection
-    @CollectionTable(name="cliente_pedido")
     private List<ItensCarrinho> itensCarrinho;
-
-    @Embedded
     private CupomAplicado cupomAplicado;
+    private BigDecimal valorSemDeconto;
+    private BigDecimal valorDesconto;
 
 
-    public Cliente() {
+    public CompraResponse() {
     }
 
-    public Cliente(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotBlank(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep, @NotNull @Valid Pais pais, @NotNull @Valid Estado estado, BigDecimal total, BigDecimal totalSemDesconto, List<ItensCarrinho> itensCarrinho) {
+    public CompraResponse(@Email(message = "Email Inválido") String email, @NotBlank(message = "Nome Inválido") String nome, @NotBlank(message = "Sobrenome Inválido") String sobrenome, @NotBlank(message = "CPF/CPNJ Inválido") String cpfCnpj, @NotBlank(message = "Endereço Inválido") String endereco, @NotBlank(message = "Complemento Inválido") String complemento, @NotBlank(message = "Cidade Inválido") String cidade, @NotBlank(message = "Telefone Inválido") String telefone, @NotBlank(message = "CEP Inválido") String cep, @NotNull @Valid Pais pais, @NotNull @Valid Estado estado, BigDecimal total, List<ItensCarrinho> itensCarrinho) {
         this.email = email;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -63,11 +53,10 @@ public class Cliente implements Serializable {
         this.pais = pais;
         this.estado = estado;
         this.total = total;
-        this.totalSemDesconto = totalSemDesconto;
         this.itensCarrinho = itensCarrinho;
     }
 
-    public Cliente(CompraRequest compraRequest) {
+    public CompraResponse(CompraRequest compraRequest) {
     }
 
     public Long getId() {
@@ -182,26 +171,19 @@ public class Cliente implements Serializable {
         this.itensCarrinho = itensCarrinho;
     }
 
-    public BigDecimal getTotalSemDesconto() {
-        return totalSemDesconto;
+    public BigDecimal getValorSemDeconto() {
+        return valorSemDeconto;
     }
 
-    public void setTotalSemDesconto(BigDecimal totalSemDesconto) {
-        this.totalSemDesconto = totalSemDesconto;
+    public void setValorSemDeconto(BigDecimal valorSemDeconto) {
+        this.valorSemDeconto = valorSemDeconto;
     }
 
-    public void aplicaCupom(Cupom cupom) {
-        this.cupomAplicado = new CupomAplicado(cupom);
+    public BigDecimal getValorDesconto() {
+        return valorDesconto;
     }
 
-    public void toModelCupom(String codigoCupom,EntityManager manager){
-
-        List<Cupom> cupomValido = manager
-                .createNativeQuery("SELECT * FROM CUPOM WHERE CODIGO_CUPOM = :codigo", Cupom.class)
-                .setParameter("codigo", codigoCupom)
-                .getResultList();
-
-        aplicaCupom(cupomValido.get(0));
-
+    public void setValorDesconto(BigDecimal valorDesconto) {
+        this.valorDesconto = valorDesconto;
     }
 }

@@ -7,12 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 public class CompraController {
@@ -43,12 +43,7 @@ public class CompraController {
 
         Cliente novoCliente = compraRequest.toModel(entityManager);
 
-        List<Cupom> cupomValido = entityManager
-                .createNativeQuery("SELECT * FROM CUPOM WHERE CODIGO_CUPOM = :codigo", Cupom.class)
-                .setParameter("codigo", compraRequest.getCodigoCupom())
-                .getResultList();
-
-        novoCliente.aplicaCupom(cupomValido.get(0));
+        novoCliente.toModelCupom(compraRequest.getCodigoCupom(), entityManager);
 
         entityManager.persist(novoCliente);
         URI location = URI.create(String.format("/validar/compra", novoCliente.getId()));
@@ -59,10 +54,9 @@ public class CompraController {
     public ResponseEntity<?> consultaDetalheCompra(@PathVariable("id") Long id){
 
         Cliente buscaDetalheCompra = entityManager.find(Cliente.class, id);
-
         if (buscaDetalheCompra == null){
-            return ResponseEntity.notFound().build();
-        }
+          return ResponseEntity.notFound().build(); }
         return ResponseEntity.status(HttpStatus.OK).body(buscaDetalheCompra);
+
     }
 }
